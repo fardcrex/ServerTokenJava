@@ -51,7 +51,7 @@
 
     <context-param>
         <param-name>servidor</param-name>
-        <param-value>https://www.lacoraza.com</param-value>
+        <param-value>zadness.com</param-value>
     </context-param>
     <context-param>
         <param-name>puerto</param-name>
@@ -59,15 +59,15 @@
     </context-param>
     <context-param>
         <param-name>basededatos</param-name>
-        <param-value>usuariosBD</param-value>
+        <param-value>javajuniorbd</param-value>
     </context-param>
     <context-param>
         <param-name>usuario</param-name>
-        <param-value>pepito</param-value>
+        <param-value>jair</param-value>
     </context-param>
     <context-param>
         <param-name>password</param-name>
-        <param-value>1234</param-value>
+        <param-value>conislla321</param-value>
     </context-param>
     <context-param>
         <param-name>claveJWT</param-name>

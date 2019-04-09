@@ -44,6 +44,7 @@
     <orderEntry type="library" name="Maven: org.eclipse:yasson:1.0.3" level="project" />
     <orderEntry type="library" name="Maven: jakarta.json.bind:jakarta.json.bind-api:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: jakarta.json:jakarta.json-api:1.1.5" level="project" />
+    <orderEntry type="library" name="Maven: postgresql:postgresql:9.1-901-1.jdbc4" level="project" />
     <orderEntry type="library" name="Maven: io.jsonwebtoken:jjwt-api:0.10.5" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: io.jsonwebtoken:jjwt-impl:0.10.5" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: io.jsonwebtoken:jjwt-jackson:0.10.5" level="project" />

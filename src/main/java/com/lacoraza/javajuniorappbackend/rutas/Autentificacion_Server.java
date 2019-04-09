@@ -1,7 +1,7 @@
 package com.lacoraza.javajuniorappbackend.rutas;
 
 import com.google.gson.Gson;
-import com.lacoraza.javajuniorappbackend.config.Utilidades;
+import com.lacoraza.javajuniorappbackend.config.VariablesDeEntorno;
 import io.jsonwebtoken.JwsHeader;
 import io.jsonwebtoken.Jwts;
 
@@ -23,7 +23,7 @@ public class Autentificacion_Server {
 
 
 
-        SecretKey key = Utilidades.getInstancia().getKeyJWT();
+        SecretKey key = VariablesDeEntorno.getInstancia().getKeyJWT();
 
 
         System.out.println(key.toString());
