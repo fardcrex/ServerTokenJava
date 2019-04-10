@@ -13,7 +13,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Jersey Web Application</servlet-name>
-        <url-pattern>/api/*</url-pattern>
+        <url-pattern>/v1/*</url-pattern>
     </servlet-mapping>
 
     <filter>
@@ -46,7 +46,7 @@
     </filter>
     <filter-mapping>
         <filter-name>CorsFilter</filter-name>
-        <url-pattern>/webapi/*</url-pattern>
+        <url-pattern>/v1/*</url-pattern>
     </filter-mapping>
 
     <context-param>
@@ -69,9 +69,19 @@
         <param-name>password</param-name>
         <param-value>conislla321</param-value>
     </context-param>
+
+
     <context-param>
         <param-name>claveJWT</param-name>
         <param-value>f50eb79424da5a0dc415bbb1465e254069011c632b23376a221e95cfaf75c03d</param-value>
+    </context-param>
+    <context-param>
+        <param-name>NameRoot</param-name>
+        <param-value>Root</param-value>
+    </context-param>
+    <context-param>
+        <param-name>PassRoot</param-name>
+        <param-value>root321</param-value>
     </context-param>
 
 </web-app>
