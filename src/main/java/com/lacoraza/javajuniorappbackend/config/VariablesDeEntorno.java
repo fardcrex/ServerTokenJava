@@ -1,5 +1,7 @@
 package com.lacoraza.javajuniorappbackend.config;
 
+import com.lacoraza.javajuniorappbackend.modelos.Usuario;
+
 import javax.crypto.SecretKey;
 import java.util.Map;
 
@@ -25,7 +27,7 @@ public final class VariablesDeEntorno {
     }
 
     public Map<String,String> getConfigBD() {
-        return this.propiedadesBD;
+        return propiedadesBD;
     }
 
 

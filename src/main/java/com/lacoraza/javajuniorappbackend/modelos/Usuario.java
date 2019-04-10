@@ -71,7 +71,7 @@ public class Usuario implements Serializable {
 
     public void setPassword(String password) throws NoSuchAlgorithmException {
 
-        this.password =  hashear256(password);
+        this.password = hashear256(password);
     }
 
     public Role getRole() {
@@ -120,6 +120,9 @@ public class Usuario implements Serializable {
                 '}';
     }
     private String hashear256(String password) throws NoSuchAlgorithmException {
+        if (password.equalsIgnoreCase("")){
+            return "";
+        }
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] encodedhash = digest.digest(
                 password.getBytes(StandardCharsets.UTF_8));
