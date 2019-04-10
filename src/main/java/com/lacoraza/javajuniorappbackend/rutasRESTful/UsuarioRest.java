@@ -77,7 +77,7 @@ public class UsuarioRest {
         permisos.add("All_excepto");
 
         if(TodoBien(httpHeaders,permisos)){
-            Usuario usuario =  usuarioControlador.putUsuario(newUsuario,id);
+            Usuario usuario =  usuarioControlador.putUsuario(newUsuario,id,httpHeaders);
             return Response.status(Response.Status.ACCEPTED).entity(usuario).build();
         }else {
             return Response.status(Response.Status.FORBIDDEN).build();

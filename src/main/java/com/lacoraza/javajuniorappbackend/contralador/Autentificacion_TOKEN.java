@@ -71,7 +71,7 @@ public class Autentificacion_TOKEN {
     public boolean verificarTOKEN(HttpHeaders httpHeaders){
         Map<String,Object> respuesta = new HashMap<>();
         try {
-            String authorization = httpHeaders.getRequestHeader("authorization").get(0);
+            String authorization = httpHeaders.getRequestHeader("Authorization").get(0);
 
 
             Jws<Claims> jwsRecibido;
@@ -121,7 +121,12 @@ public class Autentificacion_TOKEN {
     }
 
 
-
+    public String obtenerSubject(HttpHeaders httpHeaders){
+        String authorization = httpHeaders.getRequestHeader("authorization").get(0);
+        Jws<Claims> jwsRecibido;
+        jwsRecibido=Jwts.parser().setSigningKey(key).parseClaimsJws(authorization);
+        return jwsRecibido.getBody().getSubject();
+    }
 
 
     private   Date sumarRestarHorasFecha(Date fecha, int horas){
