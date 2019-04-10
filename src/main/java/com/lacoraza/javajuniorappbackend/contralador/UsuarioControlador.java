@@ -3,13 +3,15 @@ package com.lacoraza.javajuniorappbackend.contralador;
 import com.lacoraza.javajuniorappbackend.bdconnect.daoPSQL.UsuarioPSQL;
 import com.lacoraza.javajuniorappbackend.modelos.Role;
 import com.lacoraza.javajuniorappbackend.modelos.Usuario;
+
+import javax.ws.rs.core.HttpHeaders;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioControlador {
 
     UsuarioPSQL userDao = new UsuarioPSQL();
-
+    Autentificacion_TOKEN autentificacion_token = new Autentificacion_TOKEN();
 
 
     public List<Usuario> getUsuarios() {
@@ -34,9 +36,16 @@ public class UsuarioControlador {
         }
     }
 
-    public Usuario putUsuario(Usuario newUsuario,int i) {
+    public Usuario putUsuario(Usuario newUsuario, int i, HttpHeaders httpHeaders) {
+
+        String subject = autentificacion_token.obtenerSubject(httpHeaders);
         Role role = new Role();
-        role.setId(2);
+
+        if(!subject.equalsIgnoreCase("admin")){
+            role.setId(2);
+        }
+
+
         newUsuario.setRole(role);
         Usuario usuario = userDao.modificarPUT(newUsuario,i);
         return  usuario;
