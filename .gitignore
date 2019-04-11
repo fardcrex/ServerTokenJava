@@ -25,3 +25,7 @@ hs_err_pid*
 
 .idea/
 src/main/webapp/apiprueba\.html
+
+target/JavaJuniorAppBackend/index\.jsp
+
+src/main/webapp/index\.jsp
