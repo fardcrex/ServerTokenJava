@@ -71,7 +71,7 @@ public class Autentificacion_TOKEN {
     public boolean verificarTOKEN(HttpHeaders httpHeaders){
         Map<String,Object> respuesta = new HashMap<>();
         try {
-            String authorization = httpHeaders.getRequestHeader("authorization").get(0);
+            String authorization = httpHeaders.getRequestHeader("Authorization").get(0);
 
 
             Jws<Claims> jwsRecibido;

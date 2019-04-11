@@ -1,6 +1,7 @@
 package com.lacoraza.javajuniorappbackend.rutasRESTful;
 
 
+import com.lacoraza.javajuniorappbackend.config.MensajeResponse;
 import com.lacoraza.javajuniorappbackend.contralador.Autentificacion_TOKEN;
 import com.lacoraza.javajuniorappbackend.contralador.UsuarioControlador;
 import com.lacoraza.javajuniorappbackend.modelos.Usuario;
@@ -20,6 +21,7 @@ public class UsuarioRest {
 
     UsuarioControlador usuarioControlador = new UsuarioControlador();
     Autentificacion_TOKEN controlador = new Autentificacion_TOKEN();
+    MensajeResponse mensajeResponse = new MensajeResponse();
 
     @GET
     public Response getUsuarios(@QueryParam("key") String Tokenkey ,@Context HttpHeaders httpHeaders){
