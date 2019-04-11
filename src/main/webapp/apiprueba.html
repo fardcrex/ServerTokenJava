@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<a href="./">ssddddddddss</a>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    let token ="",url="http://localhost:8090/JavaJuniorAppBackend/v1/usuarios"
+
+    axios.defaults.headers.common['Authorization'] = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBZG1pbiIsImV4cCI6MTU1NDk1MzI1NywidXNlcl9pZCAiOjUxLCJyb2xlX2lkIjoxfQ.QtAMTKAZERgGHhH8vQ4h7zRAKxR9OD4lteXLWBrVB6TXkkzJrAsKR8HxviPF4yuLBEb9Py1e79bLZeYp0to9IA";
+    // axios.defaults.headers.post['Content-type'] = 'appication/json';
+    axios.post(url, {   correo: "cjjjjjjjjzzo",
+        imagen: "imagyuiygghghefault.jpg",
+        nombre: "administrador",
+        password: "xxxxxx",
+        role: {
+            id: 1,
+            name:"sasxa"
+        }
+    })
+
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+
+
+    // axios.defaults.headers.post['Content-type'] = 'appication/json';
+    axios.post("http://localhost:8090/JavaJuniorAppBackend/v1/autentificacion", {
+        "correo": "ROOT",
+        "password": "root321"
+    })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    axios.defaults.headers.common['Authorization'] = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBZG1pbiIsImV4cCI6MTU1NDk1MzI1NywidXNlcl9pZCAiOjUxLCJyb2xlX2lkIjoxfQ.QtAMTKAZERgGHhH8vQ4h7zRAKxR9OD4lteXLWBrVB6TXkkzJrAsKR8HxviPF4yuLBEb9Py1e79bLZeYp0to9IA";
+    // axios.defaults.headers.post['Content-type'] = 'appication/json';
+    axios.put("http://localhost:8090/JavaJuniorAppBackend/v1/usuarios/72", {
+        correo: "fffffffff",
+        imagen: "imagyuiygghghefault.jpg",
+        nombre: "administrador",
+        password: "xxxxxx",
+        role: {
+            id: 1,
+            name:"sasxa"
+        }
+    })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+
+    axios.defaults.headers.common['Authorization'] = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBZG1pbiIsImV4cCI6MTU1NDk1MzI1NywidXNlcl9pZCAiOjUxLCJyb2xlX2lkIjoxfQ.QtAMTKAZERgGHhH8vQ4h7zRAKxR9OD4lteXLWBrVB6TXkkzJrAsKR8HxviPF4yuLBEb9Py1e79bLZeYp0to9IA";
+
+    axios.delete("http://localhost:8090/JavaJuniorAppBackend/v1/usuarios/73"
+    )
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+</script>
+</body>
+</html>
