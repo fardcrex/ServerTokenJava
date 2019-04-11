@@ -1,4 +1,4 @@
-package com.lacoraza.javajuniorappbackend.contralador;
+package com.lacoraza.javajuniorappbackend.LogicaDeNegocios;
 
 import com.lacoraza.javajuniorappbackend.bdconnect.daoPSQL.UsuarioPSQL;
 import com.lacoraza.javajuniorappbackend.modelos.Role;
@@ -20,9 +20,22 @@ public class UsuarioControlador {
 
     }
 
-    public Usuario getUsuario(int i) {
-        Usuario usuario = userDao.obtenerPorIDGet(i);
-        return  usuario;
+    public Object getUsuario(int id, HttpHeaders httpHeaders) {
+
+
+        String subject = autentificacion_token.obtenerSubject(httpHeaders);
+        if(subject.equalsIgnoreCase("admin")){
+            Usuario usuario = userDao.obtenerPorIDGet(id);
+            return  usuario;
+        }
+
+
+        if ( autentificacion_token.sonIdIguales(httpHeaders,id)){
+            Usuario usuario = userDao.obtenerPorIDGet(id);
+            return  usuario;
+        }
+        return new String("Su id de usuario es incorrecto");
+
 
     }
 
