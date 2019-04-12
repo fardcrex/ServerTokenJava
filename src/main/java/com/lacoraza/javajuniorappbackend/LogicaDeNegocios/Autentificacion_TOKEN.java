@@ -28,8 +28,8 @@ public class Autentificacion_TOKEN {
         }
 
 
-        String correo = (String) credenciales.get("correo");
-        String password = (String) credenciales.get("password");
+        String correo = ((String) credenciales.get("correo")).trim();
+        String password = ((String) credenciales.get("password")).trim();
 
         Usuario usuario ;
         UsuarioPSQL usuarioPSQL = new UsuarioPSQL();
@@ -37,6 +37,7 @@ public class Autentificacion_TOKEN {
 
         System.out.println(usuario.toString());
         if(usuario.getId()==0){
+            respuesta.put("Usuario",usuario);
             respuesta.put("status",3);
             return respuesta;
         }
@@ -55,8 +56,7 @@ public class Autentificacion_TOKEN {
         Role role =     ((Usuario)credenciales.get("Usuario")).getRole();
 
 
-        System.out.println(correo); System.out.println(correo); System.out.println(correo); System.out.println(correo);
-        String jws = Jwts.builder()
+       String jws = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setSubject(role.getName())
                 .setExpiration(sumarRestarHorasFecha(new Date(),5))
@@ -65,19 +65,16 @@ public class Autentificacion_TOKEN {
                 .claim("role_id", role.getId())
                 .signWith(key)
                 .compact();
-
-
-
-
         return jws;
     }
 
+   // replaceAll("Bearer ", "")
     public boolean verificarTOKEN(HttpHeaders httpHeaders){
         Map<String,Object> respuesta = new HashMap<>();
         try {
             String authorization = httpHeaders.getRequestHeader("Authorization").get(0);
-
-
+            authorization=authorization.substring(7);
+         //   authorization.length();
             Jws<Claims> jwsRecibido;
             jwsRecibido = Jwts.parser().setSigningKey(key).parseClaimsJws(authorization);
 
@@ -96,13 +93,13 @@ public class Autentificacion_TOKEN {
 
 
     }
-
     public boolean verificarPermisos(HttpHeaders httpHeaders, ArrayList<String> permisos) {
 
         if(permisos.size() ==1 && permisos.get(0).equalsIgnoreCase("All_excepto"))
             return true;
 
         String authorization = httpHeaders.getRequestHeader("authorization").get(0);
+        authorization=authorization.substring(7);
         Jws<Claims> jwsRecibido =Jwts.parser().setSigningKey(key).parseClaimsJws(authorization);
 
 
@@ -125,6 +122,7 @@ public class Autentificacion_TOKEN {
 
     public String obtenerSubject(HttpHeaders httpHeaders){
         String authorization = httpHeaders.getRequestHeader("authorization").get(0);
+        authorization=authorization.substring(7);
         Jws<Claims> jwsRecibido;
         jwsRecibido=Jwts.parser().setSigningKey(key).parseClaimsJws(authorization);
 
@@ -135,6 +133,7 @@ public class Autentificacion_TOKEN {
     }
     public boolean sonIdIguales(HttpHeaders httpHeaders,int i){
         String authorization = httpHeaders.getRequestHeader("authorization").get(0);
+        authorization=authorization.substring(7);
 
         try {
             Jwts.parser().require("user_id",i ).setSigningKey(key).parseClaimsJws(authorization);
@@ -150,6 +149,7 @@ public class Autentificacion_TOKEN {
     }
     public int obtenerIdUserToken(HttpHeaders httpHeaders){
         String authorization = httpHeaders.getRequestHeader("authorization").get(0);
+        authorization=authorization.substring(7);
         Jws<Claims> jwsRecibido;
         jwsRecibido=Jwts.parser().setSigningKey(key).parseClaimsJws(authorization);
 
