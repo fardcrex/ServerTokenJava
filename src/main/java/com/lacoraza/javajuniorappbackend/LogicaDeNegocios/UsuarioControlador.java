@@ -34,32 +34,49 @@ public class UsuarioControlador {
             Usuario usuario = userDao.obtenerPorIDGet(id);
             return  usuario;
         }
-        return new String("Su id de usuario es incorrecto");
+        return "Su id de usuario es incorrecto";
 
 
     }
 
-    public Usuario postUsuario(Usuario newUsuario) {
-        Usuario usuario = new Usuario();
-        try {
-             usuario = userDao.insertarPOST(newUsuario);
-            return  usuario;
-        }catch (Exception e){
-            return  usuario;
+    public Object postUsuario(Usuario newUsuario, HttpHeaders httpHeaders ) {
+
+        String subject = autentificacion_token.obtenerSubject(httpHeaders);
+        if (newUsuario.getRole()==null || subject.equalsIgnoreCase("user"))        {
+            newUsuario.setRole(new Role());
+            newUsuario.getRole().setId(2); //default
         }
+
+
+        if(!subject.equalsIgnoreCase("admin") && newUsuario.getRole().getId() ==1){
+            newUsuario.getRole().setId(2);
+        }
+
+
+        Usuario usuario = userDao.insertarPOST(newUsuario);
+
+        if(usuario.getId()==0)
+            return usuario.getNombre();
+
+        return  usuario;
+
     }
+
+
 
     public Usuario putUsuario(Usuario newUsuario, int i, HttpHeaders httpHeaders) {
 
         String subject = autentificacion_token.obtenerSubject(httpHeaders);
-        Role role = new Role();
-
-        if(!subject.equalsIgnoreCase("admin")){
-            role.setId(2);
+        if (newUsuario.getRole()==null  )
+        {
+            newUsuario.setRole(new Role());
+            newUsuario.getRole().setId(2);
         }
 
+        if(!subject.equalsIgnoreCase("admin")){
+            newUsuario.getRole().setId(2);
+        }
 
-        newUsuario.setRole(role);
         Usuario usuario = userDao.modificarPUT(newUsuario,i);
         return  usuario;
 
