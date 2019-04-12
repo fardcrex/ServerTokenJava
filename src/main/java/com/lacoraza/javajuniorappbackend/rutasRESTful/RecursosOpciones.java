@@ -3,7 +3,11 @@ package com.lacoraza.javajuniorappbackend.rutasRESTful;
 import com.lacoraza.javajuniorappbackend.LogicaDeNegocios.Autentificacion_TOKEN;
 import com.lacoraza.javajuniorappbackend.LogicaDeNegocios.OpcionesControlador;
 
-import javax.ws.rs.*;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -41,18 +45,10 @@ public class RecursosOpciones {
 
     }
 
-
-
-
-
-
-
-
-
-
+    
 
     private int TodoBien (HttpHeaders httpHeaders, ArrayList<String> permisos){
-        boolean permiso = false;
+        boolean permiso = true;
         try {
             if(permiso && !controlador.verificarTOKEN(httpHeaders) )
                 return 1;
