@@ -1,6 +1,5 @@
 package com.lacoraza.javajuniorappbackend.config;
 
-import com.lacoraza.javajuniorappbackend.modelos.Usuario;
 
 import javax.crypto.SecretKey;
 import java.util.Map;

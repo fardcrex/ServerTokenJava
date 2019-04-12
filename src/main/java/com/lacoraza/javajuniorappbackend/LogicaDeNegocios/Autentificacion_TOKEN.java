@@ -1,4 +1,4 @@
-package com.lacoraza.javajuniorappbackend.contralador;
+package com.lacoraza.javajuniorappbackend.LogicaDeNegocios;
 
 import com.lacoraza.javajuniorappbackend.bdconnect.daoPSQL.UsuarioPSQL;
 import com.lacoraza.javajuniorappbackend.config.VariablesDeEntorno;
@@ -8,7 +8,6 @@ import io.jsonwebtoken.*;
 
 import javax.crypto.SecretKey;
 import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
 import java.util.*;
 
 public class Autentificacion_TOKEN {
@@ -20,7 +19,11 @@ public class Autentificacion_TOKEN {
         respuesta.put("status",false);
 
         if( credenciales.get("correo")==null || credenciales.get("password")== null  ){
-
+            respuesta.put("status",1);
+            return respuesta;
+        }
+        if( credenciales.get("correo").equalsIgnoreCase("") || credenciales.get("password").equalsIgnoreCase("")  ){
+            respuesta.put("status",2);
             return respuesta;
         }
 
@@ -31,41 +34,42 @@ public class Autentificacion_TOKEN {
         Usuario usuario ;
         UsuarioPSQL usuarioPSQL = new UsuarioPSQL();
         usuario = usuarioPSQL.validarUsuario(correo,password);
+
         System.out.println(usuario.toString());
         if(usuario.getId()==0){
-
+            respuesta.put("status",3);
             return respuesta;
         }
 
-
-        respuesta.put("status",true);
-        respuesta.put("usuario",usuario);
+        respuesta.put("Usuario",usuario);
+        respuesta.put("status",4);
         return respuesta;
 
     }
 
-    public  Map<String, String> crearTOKEN(Map<String, Object> credenciales) {
+    public  String crearTOKEN(Map<String, Object> credenciales) {
 
 
-        int user_id   = ((Usuario)credenciales.get("usuario")).getId();
-        String correo = ((Usuario)credenciales.get("usuario")).getCorreo();
-        Role role =     ((Usuario)credenciales.get("usuario")).getRole();
+        int user_id   = ((Usuario)credenciales.get("Usuario")).getId();
+        String correo = ((Usuario)credenciales.get("Usuario")).getCorreo();
+        Role role =     ((Usuario)credenciales.get("Usuario")).getRole();
 
 
+        System.out.println(correo); System.out.println(correo); System.out.println(correo); System.out.println(correo);
         String jws = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setSubject(role.getName())
-                .setExpiration(sumarRestarHorasFecha(new Date(),2))
-                .claim("user_id ", user_id )
+                .setExpiration(sumarRestarHorasFecha(new Date(),5))
+                .claim("user_id", user_id )
+                .claim("correo", correo)
                 .claim("role_id", role.getId())
-                .claim("email",correo)
                 .signWith(key)
                 .compact();
 
-        Map<String,String> respuesta = new HashMap<>();
-        respuesta.put("token",jws);
 
-        return respuesta;
+
+
+        return jws;
     }
 
     public boolean verificarTOKEN(HttpHeaders httpHeaders){
@@ -95,13 +99,11 @@ public class Autentificacion_TOKEN {
 
     public boolean verificarPermisos(HttpHeaders httpHeaders, ArrayList<String> permisos) {
 
-        if(permisos.size() ==1 || permisos.get(0).equalsIgnoreCase("All_excepto"))
+        if(permisos.size() ==1 && permisos.get(0).equalsIgnoreCase("All_excepto"))
             return true;
 
         String authorization = httpHeaders.getRequestHeader("authorization").get(0);
-        Jws<Claims> jwsRecibido;
-        jwsRecibido=Jwts.parser().setSigningKey(key).parseClaimsJws(authorization);
-
+        Jws<Claims> jwsRecibido =Jwts.parser().setSigningKey(key).parseClaimsJws(authorization);
 
 
         if(permisos.get(0).equalsIgnoreCase("All_excepto")){
@@ -126,6 +128,21 @@ public class Autentificacion_TOKEN {
         Jws<Claims> jwsRecibido;
         jwsRecibido=Jwts.parser().setSigningKey(key).parseClaimsJws(authorization);
         return jwsRecibido.getBody().getSubject();
+    }
+    public boolean sonIdIguales(HttpHeaders httpHeaders,int i){
+        String authorization = httpHeaders.getRequestHeader("authorization").get(0);
+
+        try {
+            Jwts.parser().require("user_id",i ).setSigningKey(key).parseClaimsJws(authorization);
+
+            return true;
+
+        } catch(InvalidClaimException ice) {
+            return false;
+            // the 'myfield' field was missing or did not have a 'myRequiredValue' value
+        }
+
+
     }
 
 

@@ -1,17 +1,10 @@
 package com.lacoraza.javajuniorappbackend;
 
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.container.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 
-import javax.ws.rs.container.*;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
-import java.io.IOException;
 
 
 @Provider
@@ -38,8 +31,7 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
      * with an Origin header.
      */
     private static   boolean isPreflightRequest(ContainerRequestContext request) {
-        boolean value = request.getHeaderString("Origin") != null
-                && request.getMethod().equalsIgnoreCase("OPTIONS");
+
         return request.getHeaderString("Origin") != null
                 && request.getMethod().equalsIgnoreCase("OPTIONS");
     }
