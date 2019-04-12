@@ -16,6 +16,14 @@ public class OpcionesControlador {
 
         ArrayList<Opcion> LIST = opcionPSQL.obtenerGET();
         return  LIST;
-
     }
+
+    public List<Opcion> getOpcionesbyId(int id) {
+
+        ArrayList<Opcion> LIST = opcionPSQL.getOpcionesbyId(id);
+        return  LIST;
+    }
+
+
+
 }

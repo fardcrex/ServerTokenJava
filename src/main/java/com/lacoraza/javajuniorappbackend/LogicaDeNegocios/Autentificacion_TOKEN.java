@@ -127,7 +127,11 @@ public class Autentificacion_TOKEN {
         String authorization = httpHeaders.getRequestHeader("authorization").get(0);
         Jws<Claims> jwsRecibido;
         jwsRecibido=Jwts.parser().setSigningKey(key).parseClaimsJws(authorization);
+
+        Object num =jwsRecibido.getBody().get("user_id");
+
         return jwsRecibido.getBody().getSubject();
+
     }
     public boolean sonIdIguales(HttpHeaders httpHeaders,int i){
         String authorization = httpHeaders.getRequestHeader("authorization").get(0);
@@ -144,6 +148,17 @@ public class Autentificacion_TOKEN {
 
 
     }
+    public int obtenerIdUserToken(HttpHeaders httpHeaders){
+        String authorization = httpHeaders.getRequestHeader("authorization").get(0);
+        Jws<Claims> jwsRecibido;
+        jwsRecibido=Jwts.parser().setSigningKey(key).parseClaimsJws(authorization);
+
+        int num =(int) jwsRecibido.getBody().get("user_id");
+
+        return num;
+
+    }
+
 
 
     private   Date sumarRestarHorasFecha(Date fecha, int horas){
