@@ -15,7 +15,8 @@ import java.util.logging.Logger;
 
 public class OpcionPSQL implements InterfaceOpcion {
 
-    private final String  OBTENER_ALL = "SELECT id,name,estado from opciones";
+    private String  OBTENER_ALL = "SELECT * FROM opciones ";
+    private String  OBTENER_ById_User =" SELECT opciones.id ,opciones.name,opciones.estado,opciones.created_at,opciones.updated_at  FROM opciones INNER JOIN usuarios_opciones on opciones.id = usuarios_opciones.opcion_id where usuario_id = ?";
     private Connection conexion;
     private PreparedStatement sentencia;
     private ResultSet resultados;
@@ -54,6 +55,8 @@ public class OpcionPSQL implements InterfaceOpcion {
             opcion.setId(resultados.getInt("id"));
             opcion.setName(resultados.getString("name"));
             opcion.setEstado(resultados.getBoolean("estado"));
+            opcion.setCreated_at(resultados.getDate(4));
+            opcion.setUpdated_at(resultados.getDate(5));
             OpcionList.add(opcion);
         }
     } catch (ClassNotFoundException ex) {
@@ -66,6 +69,39 @@ public class OpcionPSQL implements InterfaceOpcion {
     }
         return OpcionList;
     }
+
+
+
+    public ArrayList<Opcion> getOpcionesbyId(int id) {
+        ArrayList<Opcion> OpcionList = new ArrayList<>();
+
+        try {
+            conexion = new ConexionPSQL().getConnection();
+            sentencia = conexion.prepareStatement(OBTENER_ById_User);
+            sentencia.setInt(1,id);
+            resultados = sentencia.executeQuery();
+
+            while (resultados.next()){
+                Opcion opcion = new Opcion();
+                opcion.setId(resultados.getInt("id"));
+                opcion.setName(resultados.getString("name"));
+                opcion.setEstado(resultados.getBoolean("estado"));
+                opcion.setCreated_at(resultados.getDate(4));
+                opcion.setUpdated_at(resultados.getDate(5));
+                OpcionList.add(opcion);
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UsuarioPSQL.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (
+                SQLException e) {
+            e.printStackTrace();
+        }  finally {
+            cerrarConexiones();
+        }
+        return OpcionList;
+
+    }
+
 
     private void cerrarConexiones(){
         try {

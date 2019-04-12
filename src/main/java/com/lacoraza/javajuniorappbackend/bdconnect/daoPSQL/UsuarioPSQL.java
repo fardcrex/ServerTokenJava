@@ -88,6 +88,7 @@ public class UsuarioPSQL  implements InterfaceUsuario {
         }
         if (seInserto==1){
             try {o.setPassword("");}catch (Exception E){}
+            o.setId(integer);
             return o;
         }else {
             return null;
@@ -213,6 +214,9 @@ public class UsuarioPSQL  implements InterfaceUsuario {
             Logger.getLogger(UsuarioPSQL.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException e) {
             e.printStackTrace();
+            usuario.setNombre(e.getMessage());
+            cerrarConexiones();
+            return usuario;
         }  finally {
             cerrarConexiones();
 

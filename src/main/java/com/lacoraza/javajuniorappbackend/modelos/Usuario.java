@@ -1,9 +1,12 @@
 package com.lacoraza.javajuniorappbackend.modelos;
 
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+
+import javax.crypto.SecretKey;
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
@@ -24,10 +27,10 @@ public class Usuario implements Serializable {
 
     public Usuario(int id, String nombre, String imagen, String correo, String password, Role role, Date update_at, Date created_at) throws NoSuchAlgorithmException {
         this.id = id;
-        this.nombre = nombre;
-        this.imagen = imagen;
-        this.correo = correo;
-        this.password = hashear256(password);
+        this.nombre = nombre.trim();
+        this.imagen = imagen.trim();
+        this.correo = correo.trim();
+        this.password = algoritmoDeEncriptacion(password).trim();
         this.role = role;
         this.update_at = update_at;
         this.created_at = created_at;
@@ -71,7 +74,7 @@ public class Usuario implements Serializable {
 
     public void setPassword(String password) throws NoSuchAlgorithmException {
 
-        this.password = hashear256(password);
+        this.password = algoritmoDeEncriptacion(password);
     }
 
     public Role getRole() {
@@ -119,14 +122,21 @@ public class Usuario implements Serializable {
                 ", created_at=" + created_at +
                 '}';
     }
-    private String hashear256(String password) throws NoSuchAlgorithmException {
+    private String algoritmoDeEncriptacion(String password){
         if (password.equalsIgnoreCase("")){
             return "";
         }
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] encodedhash = digest.digest(
-                password.getBytes(StandardCharsets.UTF_8));
-        System.out.println(encodedhash.toString());
-        return new String(encodedhash);
+        password ="zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"+password;
+        password.trim();
+        byte[] miClaveBytes = password.getBytes();
+        SecretKey key = Keys.hmacShaKeyFor(miClaveBytes);
+         password = Jwts.builder().setHeaderParam("typ", "JWT").signWith(key, SignatureAlgorithm.HS256)
+                .setSubject("pass")
+                .compact();
+        int posicion = password.indexOf(".");
+        password=password.substring(posicion+1);
+        posicion = password.indexOf(".");
+        password=password.substring(posicion+1);
+        return password;
     }
 }
