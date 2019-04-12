@@ -59,7 +59,7 @@ public class Autentificacion_TOKEN {
         String jws = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setSubject(role.getName())
-                .setExpiration(sumarRestarHorasFecha(new Date(),2))
+                .setExpiration(sumarRestarHorasFecha(new Date(),5))
                 .claim("user_id", user_id )
                 .claim("correo", correo)
                 .claim("role_id", role.getId())
@@ -99,13 +99,11 @@ public class Autentificacion_TOKEN {
 
     public boolean verificarPermisos(HttpHeaders httpHeaders, ArrayList<String> permisos) {
 
-        if(permisos.size() ==1 || permisos.get(0).equalsIgnoreCase("All_excepto"))
+        if(permisos.size() ==1 && permisos.get(0).equalsIgnoreCase("All_excepto"))
             return true;
 
         String authorization = httpHeaders.getRequestHeader("authorization").get(0);
-        Jws<Claims> jwsRecibido;
-        jwsRecibido=Jwts.parser().setSigningKey(key).parseClaimsJws(authorization);
-
+        Jws<Claims> jwsRecibido =Jwts.parser().setSigningKey(key).parseClaimsJws(authorization);
 
 
         if(permisos.get(0).equalsIgnoreCase("All_excepto")){

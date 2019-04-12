@@ -4,7 +4,6 @@ import com.lacoraza.javajuniorappbackend.bdconnect.i_dao.InterfaceUsuario;
 import com.lacoraza.javajuniorappbackend.modelos.Role;
 import com.lacoraza.javajuniorappbackend.modelos.Usuario;
 
-import javax.validation.constraints.Null;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,10 +18,10 @@ public class UsuarioPSQL  implements InterfaceUsuario {
             "FROM usuarios usu INNER JOIN roles ON usu.role_id = roles.id WHERE usu.id=?";
     private final String  OBTENER_ALL = "SELECT usu.id,roles.id as role_id,roles.name  as role_name,usu.name,correo,imagen,usu.created_at,usu.update_at\n" +
             "FROM usuarios usu INNER JOIN roles ON usu.role_id = roles.id";
-    private final String  INSERTAR = "INSERT INTO usuarios (role_id,name,correo,password,imagen,created_at,update_at) VALUES (?,?,?,?,?,now(),now())";
+    private final String  INSERTAR = "INSERT INTO usuarios (role_id,name,correo,password,imagen,created_at,update_at) VALUES (?,?,?,?,?,now(),now()) returning id";
     private final String  MODIFICAR = "UPDATE usuarios SET role_id=?,name=?, correo=?,password=?,imagen=?, update_at=now() WHERE id=?";
     private final String  ELIMINAR = "DELETE FROM usuarios WHERE id = ?";
-    private final String  VALIDAR = "SELECT usu.id,roles.id as role_id,roles.name  as role_name ,correo  FROM usuarios usu INNER JOIN roles ON usu.role_id = roles.id WHERE correo = ? and password = ?";
+    private final String  VALIDAR = "SELECT usu.id,roles.id as role_id,roles.name  as role_name ,usu.name,correo  FROM usuarios usu INNER JOIN roles ON usu.role_id = roles.id WHERE correo = ? and password = ?";
 
 
     private Connection conexion;
@@ -31,34 +30,38 @@ public class UsuarioPSQL  implements InterfaceUsuario {
 
     @Override
     public Usuario insertarPOST(Usuario o) {
-
-        int seInserto= 0;
+        Usuario usuario =new Usuario();
+        String messageError="";
+        int IdrespuestadeBD= 0;
         try {
             conexion = new ConexionPSQL().getConnection();
             sentencia = conexion.prepareStatement(INSERTAR);
-            sentencia.setInt(1,o.getRole().getId());
-            sentencia.setString(2,o.getNombre());
-            sentencia.setString(3,o.getCorreo().toUpperCase());
-            sentencia.setString(4,o.getPassword());
-            sentencia.setString(5,o.getImagen());
-            seInserto =sentencia.executeUpdate();
-
+            sentencia.setInt(1,(o.getRole().getId() == 0)?0 :o.getRole().getId());
+            sentencia.setString(2,(o.getNombre() == null)? "" :o.getNombre().toLowerCase());
+            sentencia.setString(3,(o.getCorreo() == null)? null :o.getCorreo().toLowerCase());
+            sentencia.setString(4,(o.getPassword() == null)? null :o.getPassword());
+            sentencia.setString(5,(o.getImagen() == null)? "" :o.getImagen());
+            resultados =sentencia.executeQuery();
+            if(resultados.next()){
+                IdrespuestadeBD =Integer.parseInt(resultados.getString(1));
+            }
 
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(UsuarioPSQL.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException e) {
-            e.printStackTrace();
-            return new Usuario();
-        }  finally {
+            Object er =e;
+            messageError=e.getMessage();
+            usuario.setNombre(messageError);
             cerrarConexiones();
-        }
-        if (seInserto==1){
-            try {o.setPassword("");}catch (Exception E){}
-            return o;
-        }else {
-            return new Usuario();
-        }
+            return usuario;
 
+        }
+        if (IdrespuestadeBD>0){
+            o.setId(IdrespuestadeBD);
+            try {o.setPassword("");}catch (Exception E){} //Modificamos Password
+            return o;
+        }else
+            return usuario;
     }
 
     @Override
@@ -69,7 +72,7 @@ public class UsuarioPSQL  implements InterfaceUsuario {
             sentencia = conexion.prepareStatement(MODIFICAR);
             sentencia.setInt(1,o.getRole().getId());
             sentencia.setString(2,o.getNombre());
-            sentencia.setString(3,o.getCorreo().toUpperCase());
+            sentencia.setString(3,o.getCorreo().toLowerCase());
             sentencia.setString(4,o.getPassword());
             sentencia.setString(5,o.getImagen());
             sentencia.setInt(6,integer);
@@ -191,7 +194,7 @@ public class UsuarioPSQL  implements InterfaceUsuario {
         try {
             conexion = new ConexionPSQL().getConnection();
             sentencia = conexion.prepareStatement(VALIDAR);
-            sentencia.setString(1,correo.toUpperCase());
+            sentencia.setString(1,correo.toLowerCase());
             sentencia.setString(2,usuario.getPassword());
             resultados = sentencia.executeQuery();
 
@@ -201,6 +204,8 @@ public class UsuarioPSQL  implements InterfaceUsuario {
                 credenciales.setId(resultados.getInt("id"));
                 role.setId(resultados.getInt("role_id"));
                 role.setName(resultados.getString("role_name"));
+                credenciales.setCorreo(resultados.getString("correo"));
+                credenciales.setNombre(resultados.getString("name"));
                 credenciales.setRole(role);
                 return credenciales;
             }
@@ -214,6 +219,7 @@ public class UsuarioPSQL  implements InterfaceUsuario {
         }
         return usuario;
     }
+
     private void cerrarConexiones(){
         try {
             if (resultados != null){
