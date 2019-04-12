@@ -1,9 +1,7 @@
-package com.lacoraza.javajuniorappbackend.contralador;
+package com.lacoraza.javajuniorappbackend.LogicaDeNegocios;
 
 import com.lacoraza.javajuniorappbackend.bdconnect.daoPSQL.OpcionPSQL;
-import com.lacoraza.javajuniorappbackend.bdconnect.daoPSQL.UsuarioPSQL;
 import com.lacoraza.javajuniorappbackend.modelos.Opcion;
-import com.lacoraza.javajuniorappbackend.modelos.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +16,14 @@ public class OpcionesControlador {
 
         ArrayList<Opcion> LIST = opcionPSQL.obtenerGET();
         return  LIST;
-
     }
+
+    public List<Opcion> getOpcionesbyId(int id) {
+
+        ArrayList<Opcion> LIST = opcionPSQL.getOpcionesbyId(id);
+        return  LIST;
+    }
+
+
+
 }

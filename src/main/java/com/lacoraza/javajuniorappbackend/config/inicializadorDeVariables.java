@@ -63,8 +63,7 @@ public class inicializadorDeVariables implements ServletContextListener {
             usuario.setNombre("administrador");
             usuario.setImagen("imagenDefault.jpg");
 
-            System.out.println(NameRoot+":"+PassRoot);
-            System.out.println(usuario.toString());
+
             usuarioPSQL.insertarPOST(usuario);
 
         } catch (NoSuchAlgorithmException e) {
