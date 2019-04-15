@@ -29,3 +29,5 @@ src/main/webapp/apiprueba\.html
 target/JavaJuniorAppBackend/index\.jsp
 
 src/main/webapp/index\.jsp
+src/main/webapp/WEB-INF/web\.xml
+target/JavaJuniorAppBackend/apiprueba\.html
